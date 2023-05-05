@@ -29,8 +29,19 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
-                    Column() {
-                        MyOutLinedTextField()
+                    Column(Modifier.fillMaxSize()) {
+                        var myText by remember { mutableStateOf("") }
+                        MyTextField(myText){ myText = it}
+                        MyTextFieldAdvance(myText){
+                            myText = if (it.contains("erich")) {
+                                it.replace("erich", "lujan")
+                            } else {
+                                it
+                            }
+                        }
+                        MyOutLinedTextField(myText){
+                            myText = it
+                        }
                     }
                 }
             }
@@ -38,22 +49,28 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
+
+
+
+
+
+
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JetpackComponentsCatalogTheme {
-        MyOutLinedTextField()
+        //MyOutLinedTextField()
     }
 }
 
 @Composable
-fun MyOutLinedTextField() {
-
-    var myTextFiel by remember { mutableStateOf("") }
+fun MyOutLinedTextField(data:String, onValueChange:(String) -> Unit) {
     OutlinedTextField(
-        value = myTextFiel,
-        onValueChange = { myTextFiel = it },
-        modifier = Modifier.padding(24.dp),
+        value = data,
+        onValueChange = { onValueChange(it) },
         label = { Text(text = "Holita") },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Red,
@@ -63,22 +80,15 @@ fun MyOutLinedTextField() {
 }
 
 @Composable
-fun MyTextFieldAdvance() {
-    var myTextFiel by remember { mutableStateOf("") }
-    TextField(value = myTextFiel, onValueChange = {
-        myTextFiel = if (it.contains("ericherich")) {
-            it.replace("erich", "lujan")
-        } else {
-            it
-        }
+fun MyTextFieldAdvance(name:String, onValueChange:(String) -> Unit) {
+    TextField(value = name, onValueChange = {
+        onValueChange(it)
     }, label = { Text(text = "Introduce tu nombre") })
 }
 
 @Composable
-fun MyTextField() {
-
-    var myTextFiel by remember { mutableStateOf("") }
-    TextField(value = myTextFiel, onValueChange = { myTextFiel = it })
+fun MyTextField(name:String, onValueChange:(String) -> Unit) {
+    TextField(value = name, onValueChange = { onValueChange(it) })
 }
 
 @Composable
