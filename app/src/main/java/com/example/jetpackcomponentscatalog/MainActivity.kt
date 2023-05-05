@@ -1,13 +1,16 @@
 package com.example.jetpackcomponentscatalog
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -29,19 +32,43 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
-                    Column(Modifier.fillMaxSize()) {
-                        var myText by remember { mutableStateOf("") }
-                        MyTextField(myText){ myText = it}
-                        MyTextFieldAdvance(myText){
-                            myText = if (it.contains("erich")) {
-                                it.replace("erich", "lujan")
-                            } else {
-                                it
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(20.dp)
+                    ) {
+                        var myTextField1 by rememberSaveable { mutableStateOf("") }
+                        var myTextFieldAdvance1 by rememberSaveable { mutableStateOf("") }
+                        var myOutLinedTextField1 by rememberSaveable { mutableStateOf("") }
+                        var estado by rememberSaveable { mutableStateOf(true) }
+
+                        MyTextField(myTextField1) { myTextField1 = it }
+                        MyTextButton(){
+                            myTextFieldAdvance1 = myTextField1
+                            myOutLinedTextField1 = myTextField1
+                        }
+
+                        MyOutLinedTextField(myOutLinedTextField1) { myOutLinedTextField1 = it }
+                        MyTextFieldAdvance(myTextFieldAdvance1) {
+                            if (it.contains("habilitar")) {
+                                estado = true
                             }
+                            myTextFieldAdvance1 = it
                         }
-                        MyOutLinedTextField(myText){
-                            myText = it
+
+                        MyButton(estado) {
+                            Log.i("erich", "Se presiono el btn")
+                            estado = false
+                            myTextField1 = ""
+                            myTextFieldAdvance1 = ""
+                            myOutLinedTextField1 = ""
                         }
+                        MyOutlinedButton(estado) {
+                            Log.i("erich", "Se presiono el btn outlined")
+                            estado = false
+                            myTextFieldAdvance1 = ""
+                        }
+
                     }
                 }
             }
@@ -50,25 +77,59 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
-
-
-
-
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JetpackComponentsCatalogTheme {
-        //MyOutLinedTextField()
+        // MyButton()
     }
 }
 
 @Composable
-fun MyOutLinedTextField(data:String, onValueChange:(String) -> Unit) {
+fun MyTextButton(onClick: () -> Unit) {
+    TextButton(onClick = {onClick()}) {
+        Text(text = "hola soy un textButton")
+    }
+}
+
+@Composable
+fun MyOutlinedButton(estado: Boolean, onClick: () -> Unit) {
+    Button(
+        modifier = Modifier.padding(top = 5.dp),
+        enabled = estado,
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Black,
+            contentColor = Color.Yellow,
+            disabledBackgroundColor = Color.Yellow,
+            disabledContentColor = Color.Black
+        ),
+        //border = BorderStroke(2.dp, Color.Yellow)
+    ) {
+        Text(text = "Presionamee")
+    }
+}
+
+@Composable
+fun MyButton(estado: Boolean, onClick: () -> Unit) {
+    Button(
+        modifier = Modifier.padding(5.dp),
+        enabled = estado,
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Black,
+            contentColor = Color.Yellow
+        ),
+        border = BorderStroke(2.dp, Color.Yellow)
+    ) {
+        Text(text = "Presionamee")
+    }
+}
+
+@Composable
+fun MyOutLinedTextField(data: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
+        modifier = Modifier.padding(5.dp),
         value = data,
         onValueChange = { onValueChange(it) },
         label = { Text(text = "Holita") },
@@ -80,15 +141,24 @@ fun MyOutLinedTextField(data:String, onValueChange:(String) -> Unit) {
 }
 
 @Composable
-fun MyTextFieldAdvance(name:String, onValueChange:(String) -> Unit) {
-    TextField(value = name, onValueChange = {
-        onValueChange(it)
-    }, label = { Text(text = "Introduce tu nombre") })
+fun MyTextFieldAdvance(name: String, onValueChange: (String) -> Unit) {
+    TextField(
+        modifier = Modifier.padding(5.dp),
+        value = name,
+        onValueChange = {
+            onValueChange(it)
+        },
+        label = { Text(text = "habilita btn") }
+    )
 }
 
 @Composable
-fun MyTextField(name:String, onValueChange:(String) -> Unit) {
-    TextField(value = name, onValueChange = { onValueChange(it) })
+fun MyTextField(name: String, onValueChange: (String) -> Unit) {
+    TextField(
+        modifier = Modifier.padding(5.dp),
+        value = name,
+        onValueChange = { onValueChange(it) }
+    )
 }
 
 @Composable
