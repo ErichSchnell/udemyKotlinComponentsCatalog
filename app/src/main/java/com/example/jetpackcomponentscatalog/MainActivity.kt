@@ -5,15 +5,19 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -69,6 +73,8 @@ class MainActivity : ComponentActivity() {
                             myTextFieldAdvance1 = ""
                         }
 
+                        MyImage()
+
                     }
                 }
             }
@@ -81,10 +87,19 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     JetpackComponentsCatalogTheme {
-        // MyButton()
+        MyImage()
     }
 }
 
+@Composable
+fun MyImage(){
+    Image(
+        painter = painterResource(id = R.drawable.ic_meme),
+        contentDescription = "Es un Ejemplo",
+        alpha = 1f,
+        modifier = Modifier.size(300.dp)
+    )
+}
 @Composable
 fun MyTextButton(onClick: () -> Unit) {
     TextButton(onClick = {onClick()}) {
