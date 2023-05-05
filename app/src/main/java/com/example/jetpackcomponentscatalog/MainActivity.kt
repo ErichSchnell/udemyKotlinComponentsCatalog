@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Phone
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
@@ -40,6 +44,7 @@ class MainActivity : ComponentActivity() {
                         Modifier
                             .fillMaxSize()
                             .padding(20.dp)
+                            .verticalScroll(rememberScrollState())
                     ) {
                         var myTextField1 by rememberSaveable { mutableStateOf("") }
                         var myTextFieldAdvance1 by rememberSaveable { mutableStateOf("") }
@@ -47,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         var estado by rememberSaveable { mutableStateOf(true) }
 
                         MyTextField(myTextField1) { myTextField1 = it }
-                        MyTextButton(){
+                        MyTextButton() {
                             myTextFieldAdvance1 = myTextField1
                             myOutLinedTextField1 = myTextField1
                         }
@@ -73,7 +78,9 @@ class MainActivity : ComponentActivity() {
                             myTextFieldAdvance1 = ""
                         }
 
+                        MyProgress()
                         MyImage()
+                        MyImageAdvance()
 
                     }
                 }
@@ -87,22 +94,62 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     JetpackComponentsCatalogTheme {
-        MyImage()
+        MyIcon()
     }
 }
 
 @Composable
-fun MyImage(){
+fun MyProgress(){
+    Column(
+        Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.padding(top = 5.dp),
+            color = Color.Red,
+            strokeWidth = 5.dp
+        )
+        LinearProgressIndicator(
+            modifier = Modifier.padding(5.dp),
+            color = Color.Red,
+            backgroundColor = Color.Yellow
+        )
+    }
+}
+
+@Composable
+fun MyIcon(){
+    Icon(
+        imageVector = Icons.Rounded.Place,
+        contentDescription = "IconEjemplo",
+        tint = Color.Gray
+    )
+}
+@Composable
+fun MyImageAdvance() {
+    Image(
+        painter = painterResource(id = R.drawable.killjoy),
+        contentDescription = "ejemplo",
+        modifier = Modifier
+            .clip(CircleShape)
+            .size(150.dp)
+            .border(3.dp, Color.Green, CircleShape)
+    )
+}
+
+@Composable
+fun MyImage() {
     Image(
         painter = painterResource(id = R.drawable.ic_meme),
         contentDescription = "Es un Ejemplo",
         alpha = 1f,
-        modifier = Modifier.size(300.dp)
+        modifier = Modifier.size(150.dp)
     )
 }
+
 @Composable
 fun MyTextButton(onClick: () -> Unit) {
-    TextButton(onClick = {onClick()}) {
+    TextButton(onClick = { onClick() }) {
         Text(text = "hola soy un textButton")
     }
 }
