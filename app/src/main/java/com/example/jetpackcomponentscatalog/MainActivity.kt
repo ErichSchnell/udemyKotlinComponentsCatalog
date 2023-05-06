@@ -43,68 +43,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
                     val myOptions = getListBox(listOf("erich","josue","pedrito"))
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(20.dp)
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                       /* var myTextField1 by rememberSaveable { mutableStateOf("") }
-                        var myTextFieldAdvance1 by rememberSaveable { mutableStateOf("") }
-                        var myOutLinedTextField1 by rememberSaveable { mutableStateOf("") }
-                        var estado by rememberSaveable { mutableStateOf(true) }
-                        var progressReal by rememberSaveable { mutableStateOf(0f) }
-                        var estadoProgressBtnIncrese by rememberSaveable { mutableStateOf(true) }
-                        var estadoProgressBtnDecrese by rememberSaveable { mutableStateOf(true) }
-
-                        MyTextField(myTextField1) { myTextField1 = it }
-                        MyTextButton() {
-                            myTextFieldAdvance1 = myTextField1
-                            myOutLinedTextField1 = myTextField1
-                        }
-
-                        MyOutLinedTextField(myOutLinedTextField1) { myOutLinedTextField1 = it }
-                        MyTextFieldAdvance(myTextFieldAdvance1) {
-                            if (it.contains("habilitar")) {
-                                estado = true
-                            }
-                            myTextFieldAdvance1 = it
-                        }
-
-                        MyButton(estado) {
-                            Log.i("erich", "Se presiono el btn")
-                            estado = false
-                            myTextField1 = ""
-                            myTextFieldAdvance1 = ""
-                            myOutLinedTextField1 = ""
-                        }
-                        MyOutlinedButton(estado) {
-                            Log.i("erich", "Se presiono el btn outlined")
-                            estado = false
-                            myTextFieldAdvance1 = ""
-                        }
-
-                        MySwitch()
-                        MyCheckBox()
-
-                        MyProgress()
-                        MyImage()
-                        MyImageAdvance()
-                        MyProgressAdvance(progressReal)
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            MyButton(estadoProgressBtnIncrese){
-                                progressReal += 0.1f
-                            }
-                            MyButton(estadoProgressBtnDecrese){
-                                progressReal -= 0.1f
-                            }
-                            Text(text = "$progressReal")
-                            estadoProgressBtnIncrese = progressReal < 1f
-                            estadoProgressBtnDecrese = progressReal > 0.1f
-                        }*/
+                    Column(Modifier.fillMaxSize().padding(20.dp)) {
 
                         myOptions.forEach {
                             MyCheckBoxList(it)
