@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpackcomponentscatalog.ui.theme.CheckInfo
+import com.example.jetpackcomponentscatalog.ui.theme.CheckRadioButton
 import com.example.jetpackcomponentscatalog.ui.theme.JetpackComponentsCatalogTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,18 +45,41 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
                     val myOptions = getListBox(listOf("erich","josue","pedrito"))
-                    Column(Modifier.fillMaxSize().padding(20.dp)) {
+                    val myOptionsRadioButton = getListRadioButton(listOf("josue","mengano","Mecha"))
+                    
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(20.dp)) {
 
+                        MyRadioButton()
+                        MyTriStateCheckBoxList()
+                        
+                        
                         myOptions.forEach {
                             MyCheckBoxList(it)
                         }
-
                         MyCheckBoxWithText("pedro")
 
+                        myOptionsRadioButton.forEach {
+                            MyRadioButtonList(checkRadioButton = it)
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun getListRadioButton(titles:List<String>):List<CheckRadioButton> {
+    var status by rememberSaveable { mutableStateOf("") }
+    return titles.map {
+        CheckRadioButton(
+            title = it,
+            selected = status == it,
+            onCheckedChange = { status = it }
+        )
     }
 }
 
@@ -79,7 +104,47 @@ fun DefaultPreview() {
     }
 }
 
+@Composable
+fun MyRadioButtonList(checkRadioButton: CheckRadioButton){
+    Row() {
+        RadioButton(selected = checkRadioButton.selected, onClick = {checkRadioButton.onCheckedChange(checkRadioButton.title) } )
+        Text(text = "${checkRadioButton.title}")
+    }
+}
+@Composable
+fun MyRadioButton(){
+    var state by rememberSaveable{ mutableStateOf(false) }
+    Row(Modifier.fillMaxWidth()) {
+        RadioButton(
+            selected = state,
+            enabled = true,
+            onClick = {  state = ! state},
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color.Red,
+                unselectedColor = Color.Green,
+                disabledColor = Color.Blue
+            )
+        )
+        Text(text = "Ejemplo")
+    }
+}
 
+@Composable
+fun  MyTriStateCheckBoxList(){//checkInfo:CheckInfo
+    var state by rememberSaveable{ mutableStateOf(ToggleableState.Off) }
+    
+    TriStateCheckbox(
+        modifier = Modifier.padding(8.dp),
+        state = state,
+        onClick = {
+            state = when(state){
+                ToggleableState.On -> ToggleableState.Off
+                ToggleableState.Off -> ToggleableState.Indeterminate
+                ToggleableState.Indeterminate -> ToggleableState.On
+            }
+        }
+    )
+}
 
 @Composable
 fun  MyCheckBoxList(checkInfo:CheckInfo){
