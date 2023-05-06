@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Place
@@ -46,10 +47,13 @@ class MainActivity : ComponentActivity() {
                             .padding(20.dp)
                             .verticalScroll(rememberScrollState())
                     ) {
-                        var myTextField1 by rememberSaveable { mutableStateOf("") }
+                       /* var myTextField1 by rememberSaveable { mutableStateOf("") }
                         var myTextFieldAdvance1 by rememberSaveable { mutableStateOf("") }
                         var myOutLinedTextField1 by rememberSaveable { mutableStateOf("") }
                         var estado by rememberSaveable { mutableStateOf(true) }
+                        var progressReal by rememberSaveable { mutableStateOf(0f) }
+                        var estadoProgressBtnIncrese by rememberSaveable { mutableStateOf(true) }
+                        var estadoProgressBtnDecrese by rememberSaveable { mutableStateOf(true) }
 
                         MyTextField(myTextField1) { myTextField1 = it }
                         MyTextButton() {
@@ -78,10 +82,36 @@ class MainActivity : ComponentActivity() {
                             myTextFieldAdvance1 = ""
                         }
 
+                        MySwitch()
+                        MyCheckBox()
+
                         MyProgress()
                         MyImage()
                         MyImageAdvance()
+                        MyProgressAdvance(progressReal)
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            MyButton(estadoProgressBtnIncrese){
+                                progressReal += 0.1f
+                            }
+                            MyButton(estadoProgressBtnDecrese){
+                                progressReal -= 0.1f
+                            }
+                            Text(text = "$progressReal")
+                            estadoProgressBtnIncrese = progressReal < 1f
+                            estadoProgressBtnDecrese = progressReal > 0.1f
+                        }*/
 
+                        var nom1 by rememberSaveable { mutableStateOf("Erich") }
+                        var nom2 by rememberSaveable { mutableStateOf("Ezequiel") }
+                        var nom3 by rememberSaveable { mutableStateOf("Schnell") }
+                        var nom4 by rememberSaveable { mutableStateOf("Josue") }
+                        MyCheckBoxWithText(nom1)
+                        MyCheckBoxWithText(nom2)
+                        MyCheckBoxWithText(nom3)
+                        MyCheckBoxWithText(nom4)
                     }
                 }
             }
@@ -89,17 +119,62 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JetpackComponentsCatalogTheme {
-        MyIcon()
+        MySwitch()
     }
 }
-
 @Composable
-fun MyProgress(){
+fun  MyCheckBoxWithText(text:String){
+    var state by rememberSaveable { mutableStateOf(false) }
+
+    Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.Center) {
+        Checkbox(checked = state, onCheckedChange = {state = !state}, enabled = true)
+        Spacer(Modifier.width(8.dp))
+        Text(text = "$text", fontSize = 30.sp)
+    }
+}
+@Composable
+fun  MyCheckBox(){
+    var state by rememberSaveable { mutableStateOf(false) }
+    Checkbox(
+        checked = state,
+        onCheckedChange = {state = !state},
+        enabled = false,
+        colors = CheckboxDefaults.colors(
+            checkedColor = Color.Red,
+            checkmarkColor = Color.Blue,
+            uncheckedColor = Color.Magenta,
+            disabledColor = Color.Green
+        )
+    )
+}
+@Composable
+fun MySwitch(){
+    var swithState by rememberSaveable { mutableStateOf(true) }
+    Switch(
+        checked = swithState,
+        onCheckedChange = {swithState = !swithState},
+        enabled = false,
+        colors = SwitchDefaults.colors(
+            checkedTrackColor = Color.Black,
+            checkedThumbColor = Color.Black,
+            uncheckedThumbColor = Color.Red,
+            uncheckedTrackColor = Color.Red,
+            disabledCheckedThumbColor = Color.Yellow,
+            disabledCheckedTrackColor = Color.Yellow,
+            disabledUncheckedThumbColor = Color.Magenta,
+            disabledUncheckedTrackColor = Color.Magenta,
+            checkedTrackAlpha = 0.2f,
+            uncheckedTrackAlpha = 0.2f
+        )
+    )
+}
+@Composable
+fun MyProgressAdvance(progressReal:Float){
+
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -107,13 +182,35 @@ fun MyProgress(){
         CircularProgressIndicator(
             modifier = Modifier.padding(top = 5.dp),
             color = Color.Red,
-            strokeWidth = 5.dp
+            strokeWidth = 5.dp,
+            progress = progressReal
+
         )
-        LinearProgressIndicator(
-            modifier = Modifier.padding(5.dp),
-            color = Color.Red,
-            backgroundColor = Color.Yellow
-        )
+    }
+}
+@Composable
+fun MyProgress(){
+    var enableProgress by rememberSaveable { mutableStateOf(false) }
+    Column(
+        Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        if(enableProgress){
+            CircularProgressIndicator(
+                modifier = Modifier.padding(top = 5.dp),
+                color = Color.Red,
+                strokeWidth = 5.dp
+            )
+            LinearProgressIndicator(
+                modifier = Modifier.padding(5.dp),
+                color = Color.Red,
+                backgroundColor = Color.Yellow
+            )
+        }
+
+        Button(onClick = { enableProgress = !enableProgress}) { Text(text = "enable")}
+
     }
 }
 
