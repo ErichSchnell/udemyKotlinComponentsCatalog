@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.jetpackcomponentscatalog.ui.theme.CheckInfo
 import com.example.jetpackcomponentscatalog.ui.theme.JetpackComponentsCatalogTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
+                    val myOptions = getListBox(listOf("erich","josue","pedrito"))
                     Column(
                         Modifier
                             .fillMaxSize()
@@ -104,20 +106,31 @@ class MainActivity : ComponentActivity() {
                             estadoProgressBtnDecrese = progressReal > 0.1f
                         }*/
 
-                        var nom1 by rememberSaveable { mutableStateOf("Erich") }
-                        var nom2 by rememberSaveable { mutableStateOf("Ezequiel") }
-                        var nom3 by rememberSaveable { mutableStateOf("Schnell") }
-                        var nom4 by rememberSaveable { mutableStateOf("Josue") }
-                        MyCheckBoxWithText(nom1)
-                        MyCheckBoxWithText(nom2)
-                        MyCheckBoxWithText(nom3)
-                        MyCheckBoxWithText(nom4)
+                        myOptions.forEach {
+                            MyCheckBoxList(it)
+                        }
+
+                        MyCheckBoxWithText("pedro")
+
                     }
                 }
             }
         }
     }
 }
+
+@Composable
+fun getListBox(titles:List<String>):List<CheckInfo>{
+    return titles.map {
+        var status by rememberSaveable { mutableStateOf(false) }
+        CheckInfo(
+            title = it,
+            selected = status,
+            onCheckedChange = { status = it }
+        )
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -126,6 +139,19 @@ fun DefaultPreview() {
         MySwitch()
     }
 }
+
+
+
+@Composable
+fun  MyCheckBoxList(checkInfo:CheckInfo){
+
+    Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.Center) {
+        Checkbox(checked = checkInfo.selected, onCheckedChange = {checkInfo.onCheckedChange(!checkInfo.selected)})
+        Spacer(Modifier.width(8.dp))
+        Text(text = "${checkInfo.title}", fontSize = 30.sp)
+    }
+}
+
 @Composable
 fun  MyCheckBoxWithText(text:String){
     var state by rememberSaveable { mutableStateOf(false) }
