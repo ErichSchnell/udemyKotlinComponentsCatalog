@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.runtime.*
@@ -41,29 +42,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetpackComponentsCatalogTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
-                ) {
-                    val myOptions = getListBox(listOf("erich","josue","pedrito"))
-                    val myOptionsRadioButton = getListRadioButton(listOf("josue","mengano","Mecha"))
-                    
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+
                     Column(
                         Modifier
                             .fillMaxSize()
                             .padding(20.dp)) {
 
-                        MyRadioButton()
-                        MyTriStateCheckBoxList()
-                        
-                        
-                        myOptions.forEach {
-                            MyCheckBoxList(it)
-                        }
-                        MyCheckBoxWithText("pedro")
-
-                        myOptionsRadioButton.forEach {
-                            MyRadioButtonList(checkRadioButton = it)
-                        }
                     }
                 }
             }
@@ -100,7 +85,38 @@ fun getListBox(titles:List<String>):List<CheckInfo>{
 @Composable
 fun DefaultPreview() {
     JetpackComponentsCatalogTheme {
-        MySwitch()
+        //MyBadgeBox()
+    }
+}
+
+//@OptIn(ExperimentalMaterialApi::class)
+//@Composable
+//fun MyBadgeBox(){
+//    BadgedBox(
+//        badge = { Text(text = "1")},
+//        modifier = Modifier.padding(16.dp),
+//    ) {
+//        Icon(imageVector = Icons.Default.Star, contentDescription = "")
+//    }
+//}
+@Composable
+fun MyCard(){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp),
+        elevation = 40.dp,
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = Color.Green,
+        contentColor = Color.Magenta,
+        border = BorderStroke(5.dp, Color.Gray)
+    ){
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Eje 1")
+            Text(text = "Eje 2")
+            Text(text = "Eje 3")
+            Text(text = "Eje 4")
+        }
     }
 }
 
