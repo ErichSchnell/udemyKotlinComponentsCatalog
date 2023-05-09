@@ -42,12 +42,31 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetpackComponentsCatalogTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
 
                     Column(
                         Modifier
                             .fillMaxSize()
-                            .padding(20.dp)) {
+                            .padding(20.dp)
+                    ) {
+
+                        var estado by rememberSaveable { mutableStateOf(false) }
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Button(onClick = { estado = !estado}) {
+                                Text(text = "ON/OFF")
+                            }
+                            MyConfirmationDialog(
+                                show = estado,
+                                onDismiss = {estado = false}
+                            )
+                        }
+
 
                     }
                 }
@@ -57,7 +76,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun getListRadioButton(titles:List<String>):List<CheckRadioButton> {
+fun getListRadioButton(titles: List<String>): List<CheckRadioButton> {
     var status by rememberSaveable { mutableStateOf("") }
     return titles.map {
         CheckRadioButton(
@@ -69,7 +88,7 @@ fun getListRadioButton(titles:List<String>):List<CheckRadioButton> {
 }
 
 @Composable
-fun getListBox(titles:List<String>):List<CheckInfo>{
+fun getListBox(titles: List<String>): List<CheckInfo> {
     return titles.map {
         var status by rememberSaveable { mutableStateOf(false) }
         CheckInfo(
@@ -89,6 +108,44 @@ fun DefaultPreview() {
     }
 }
 
+@Composable
+fun MyDropDownMenu() {
+    var selectedText by rememberSaveable { mutableStateOf("") }
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val desserts = listOf("Helado", "Cafe", "Chocolate", "Torta")
+
+    Column(Modifier.padding(top = 20.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { selectedText = it },
+            enabled = false,
+            readOnly = true,
+            modifier = Modifier
+                .clickable { expanded = true }
+                .fillMaxWidth()
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            desserts.forEach{
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    selectedText = it
+                }) {
+                    Text(text = it)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MyDivider() {
+    Divider(modifier = Modifier.fillMaxWidth(), color = Color.Red)
+}
+
 //@OptIn(ExperimentalMaterialApi::class)
 //@Composable
 //fun MyBadgeBox(){
@@ -100,7 +157,7 @@ fun DefaultPreview() {
 //    }
 //}
 @Composable
-fun MyCard(){
+fun MyCard() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -110,7 +167,7 @@ fun MyCard(){
         backgroundColor = Color.Green,
         contentColor = Color.Magenta,
         border = BorderStroke(5.dp, Color.Gray)
-    ){
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Eje 1")
             Text(text = "Eje 2")
@@ -121,20 +178,31 @@ fun MyCard(){
 }
 
 @Composable
-fun MyRadioButtonList(checkRadioButton: CheckRadioButton){
-    Row() {
-        RadioButton(selected = checkRadioButton.selected, onClick = {checkRadioButton.onCheckedChange(checkRadioButton.title) } )
-        Text(text = "${checkRadioButton.title}")
+fun MyRadioButtonList(checkRadioButton: CheckRadioButton) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = checkRadioButton.selected,
+            onClick = { checkRadioButton.onCheckedChange(checkRadioButton.title) }
+        )
+        Text(
+            text = "${checkRadioButton.title}",
+            modifier = Modifier.padding(start = 6.dp),
+            fontSize = 16.sp,
+
+        )
     }
 }
+
 @Composable
-fun MyRadioButton(){
-    var state by rememberSaveable{ mutableStateOf(false) }
+fun MyRadioButton() {
+    var state by rememberSaveable { mutableStateOf(false) }
     Row(Modifier.fillMaxWidth()) {
         RadioButton(
             selected = state,
             enabled = true,
-            onClick = {  state = ! state},
+            onClick = { state = !state },
             colors = RadioButtonDefaults.colors(
                 selectedColor = Color.Red,
                 unselectedColor = Color.Green,
@@ -146,14 +214,14 @@ fun MyRadioButton(){
 }
 
 @Composable
-fun  MyTriStateCheckBoxList(){//checkInfo:CheckInfo
-    var state by rememberSaveable{ mutableStateOf(ToggleableState.Off) }
-    
+fun MyTriStateCheckBoxList() {//checkInfo:CheckInfo
+    var state by rememberSaveable { mutableStateOf(ToggleableState.Off) }
+
     TriStateCheckbox(
         modifier = Modifier.padding(8.dp),
         state = state,
         onClick = {
-            state = when(state){
+            state = when (state) {
                 ToggleableState.On -> ToggleableState.Off
                 ToggleableState.Off -> ToggleableState.Indeterminate
                 ToggleableState.Indeterminate -> ToggleableState.On
@@ -163,31 +231,34 @@ fun  MyTriStateCheckBoxList(){//checkInfo:CheckInfo
 }
 
 @Composable
-fun  MyCheckBoxList(checkInfo:CheckInfo){
+fun MyCheckBoxList(checkInfo: CheckInfo) {
 
     Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.Center) {
-        Checkbox(checked = checkInfo.selected, onCheckedChange = {checkInfo.onCheckedChange(!checkInfo.selected)})
+        Checkbox(
+            checked = checkInfo.selected,
+            onCheckedChange = { checkInfo.onCheckedChange(!checkInfo.selected) })
         Spacer(Modifier.width(8.dp))
         Text(text = "${checkInfo.title}", fontSize = 30.sp)
     }
 }
 
 @Composable
-fun  MyCheckBoxWithText(text:String){
+fun MyCheckBoxWithText(text: String) {
     var state by rememberSaveable { mutableStateOf(false) }
 
     Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.Center) {
-        Checkbox(checked = state, onCheckedChange = {state = !state}, enabled = true)
+        Checkbox(checked = state, onCheckedChange = { state = !state }, enabled = true)
         Spacer(Modifier.width(8.dp))
         Text(text = "$text", fontSize = 30.sp)
     }
 }
+
 @Composable
-fun  MyCheckBox(){
+fun MyCheckBox() {
     var state by rememberSaveable { mutableStateOf(false) }
     Checkbox(
         checked = state,
-        onCheckedChange = {state = !state},
+        onCheckedChange = { state = !state },
         enabled = false,
         colors = CheckboxDefaults.colors(
             checkedColor = Color.Red,
@@ -197,12 +268,13 @@ fun  MyCheckBox(){
         )
     )
 }
+
 @Composable
-fun MySwitch(){
+fun MySwitch() {
     var swithState by rememberSaveable { mutableStateOf(true) }
     Switch(
         checked = swithState,
-        onCheckedChange = {swithState = !swithState},
+        onCheckedChange = { swithState = !swithState },
         enabled = false,
         colors = SwitchDefaults.colors(
             checkedTrackColor = Color.Black,
@@ -218,8 +290,9 @@ fun MySwitch(){
         )
     )
 }
+
 @Composable
-fun MyProgressAdvance(progressReal:Float){
+fun MyProgressAdvance(progressReal: Float) {
 
     Column(
         Modifier.fillMaxWidth(),
@@ -234,15 +307,16 @@ fun MyProgressAdvance(progressReal:Float){
         )
     }
 }
+
 @Composable
-fun MyProgress(){
+fun MyProgress() {
     var enableProgress by rememberSaveable { mutableStateOf(false) }
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        if(enableProgress){
+        if (enableProgress) {
             CircularProgressIndicator(
                 modifier = Modifier.padding(top = 5.dp),
                 color = Color.Red,
@@ -255,19 +329,20 @@ fun MyProgress(){
             )
         }
 
-        Button(onClick = { enableProgress = !enableProgress}) { Text(text = "enable")}
+        Button(onClick = { enableProgress = !enableProgress }) { Text(text = "enable") }
 
     }
 }
 
 @Composable
-fun MyIcon(){
+fun MyIcon() {
     Icon(
         imageVector = Icons.Rounded.Place,
         contentDescription = "IconEjemplo",
         tint = Color.Gray
     )
 }
+
 @Composable
 fun MyImageAdvance() {
     Image(
