@@ -53,19 +53,7 @@ class MainActivity : ComponentActivity() {
                             .padding(20.dp)
                     ) {
 
-                        var estado by rememberSaveable { mutableStateOf(false) }
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ){
-                            Button(onClick = { estado = !estado}) {
-                                Text(text = "ON/OFF")
-                            }
-                            MyConfirmationDialog(
-                                show = estado,
-                                onDismiss = {estado = false}
-                            )
-                        }
+                        MySimpleRecyclerView()
 
 
                     }
