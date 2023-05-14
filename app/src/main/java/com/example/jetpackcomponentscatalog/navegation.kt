@@ -44,6 +44,18 @@ fun Screen3(navegationController: NavHostController) {
             .fillMaxSize()
             .background(Color.Gray)
     ) {
-        Text(text = "Pantalla3", modifier = Modifier.align(Alignment.Center))
+        Text(text = "Pantalla3", modifier = Modifier.align(Alignment.Center)
+            .clickable { navegationController.navigate(Pantalla4.createRoute(24)) })
+    }
+}
+
+@Composable
+fun Screen4(navegationController: NavHostController, age:Int) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Gray)
+    ) {
+        Text(text = "Mi edad es de $age años", modifier = Modifier.align(Alignment.Center))
     }
 }

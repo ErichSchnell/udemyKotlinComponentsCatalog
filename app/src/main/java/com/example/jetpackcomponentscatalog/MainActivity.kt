@@ -10,9 +10,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.jetpackcomponentscatalog.model.Routes
 import com.example.jetpackcomponentscatalog.ui.theme.CheckInfo
 import com.example.jetpackcomponentscatalog.ui.theme.CheckRadioButton
@@ -33,6 +35,14 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.Pantalla1.route){ Screen1(navegationController)}
                         composable(Routes.Pantalla2.route){ Screen2(navegationController)}
                         composable(Routes.Pantalla3.route){ Screen3(navegationController)}
+                        composable(
+                            Routes.Pantalla4.route, arguments = listOf(navArgument("age") { type = NavType.IntType})
+                        ){ backStackEntry ->
+                            Screen4(
+                                navegationController,
+                                backStackEntry.arguments?.getInt("age") ?: 0
+                            )
+                        }
                     }
 
                 }
