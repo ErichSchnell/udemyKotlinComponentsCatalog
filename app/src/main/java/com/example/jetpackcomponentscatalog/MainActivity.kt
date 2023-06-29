@@ -30,28 +30,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navegationController = rememberNavController()
-                    NavHost(navController = navegationController, startDestination = Routes.Pantalla1.route){
-                        composable(Routes.Pantalla1.route){ Screen1(navegationController)}
-                        composable(Routes.Pantalla2.route){ Screen2(navegationController)}
-                        composable(Routes.Pantalla3.route){ Screen3(navegationController)}
-                        composable(
-                            Routes.Pantalla4.route, arguments = listOf(navArgument("age") { type = NavType.IntType})
-                        ){ backStackEntry ->
-                            Screen4(
-                                navegationController,
-                                backStackEntry.arguments?.getInt("age") ?: 0
-                            )
-                        }
-                        composable(
-                            Routes.Pantalla5.route, arguments = listOf(navArgument("name") { defaultValue = "Pedrito"})
-                        ){ backStackEntry ->
-                            Screen5(
-                                navegationController,
-                                backStackEntry.arguments?.getString("name")
-                            )
-                        }
-                    }
+                    ColorAnimationBasic()
 
                 }
             }
